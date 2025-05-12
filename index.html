@@ -147,58 +147,66 @@
     });
 
     document.querySelectorAll('.cartilla').forEach(cartilla => {
-      let offsetX, offsetY, startX, startY;
+  let offsetX, offsetY, startX, startY;
 
-      cartilla.addEventListener('mousedown', e => {
-        startX = cartilla.offsetLeft;
-        startY = cartilla.offsetTop;
-        offsetX = e.clientX - cartilla.offsetLeft;
-        offsetY = e.clientY - cartilla.offsetTop;
+  cartilla.addEventListener('mousedown', e => {
+    startX = cartilla.offsetLeft;
+    startY = cartilla.offsetTop;
+    offsetX = e.clientX - cartilla.offsetLeft;
+    offsetY = e.clientY - cartilla.offsetTop;
 
-        const onMouseMove = e => {
-          cartilla.style.left = (e.clientX - offsetX) + 'px';
-          cartilla.style.top = (e.clientY - offsetY) + 'px';
-        };
+    const onMouseMove = e => {
+      cartilla.style.left = (e.clientX - offsetX) + 'px';
+      cartilla.style.top = (e.clientY - offsetY) + 'px';
+    };
 
-        const onMouseUp = () => {
-          document.removeEventListener('mousemove', onMouseMove);
-          document.removeEventListener('mouseup', onMouseUp);
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
 
-          const [correctX, correctY] = posicionesCorrectas[cartilla.id];
-          const dx = Math.abs(cartilla.offsetLeft - correctX);
-          const dy = Math.abs(cartilla.offsetTop - correctY);
+      // Obtener las coordenadas de la casilla correspondiente
+      const casilla = document.getElementById(cartilla.id);
+      const casillaRect = casilla.getBoundingClientRect();
 
-          if (dx < 40 && dy < 40) {
-            cartilla.style.left = correctX + 'px';
-            cartilla.style.top = correctY + 'px';
-            cartilla.style.pointerEvents = "none";
-            piezasCorrectas.add(cartilla.id);
+      // Obtener las coordenadas de la cartilla
+      const cartillaRect = cartilla.getBoundingClientRect();
 
-            if (piezasCorrectas.size === piezas.length) {
-              document.getElementById('mensaje-final').style.display = 'block';
+      // Calcular la diferencia de posición
+      const dx = Math.abs(cartillaRect.left - casillaRect.left);
+      const dy = Math.abs(cartillaRect.top - casillaRect.top);
 
-              // Registro en JSON
-              fetch('casillas/registrar_ganador.json', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  ganador: "Jugador",
-                  timestamp: new Date().toISOString()
-                })
-              });
-            }
+      // Si la cartilla está cerca de la casilla (puedes ajustar el valor de 20 a tu preferencia)
+      if (dx < 20 && dy < 20) {
+        cartilla.style.left = casillaRect.left - cartillaRect.width + 'px';
+        cartilla.style.top = casillaRect.top - cartillaRect.height + 'px';
+        cartilla.style.pointerEvents = "none";
+        piezasCorrectas.add(cartilla.id);
 
-            alert("¡Correcto!");
-          } else {
-            cartilla.style.left = startX + 'px';
-            cartilla.style.top = startY + 'px';
-          }
-        };
+        if (piezasCorrectas.size === piezas.length) {
+          document.getElementById('mensaje-final').style.display = 'block';
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-      });
-    });
+          // Registro en JSON
+          fetch('casillas/registrar_ganador.json', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ganador: "Jugador",
+              timestamp: new Date().toISOString()
+            })
+          });
+        }
+
+        alert("¡Correcto!");
+      } else {
+        cartilla.style.left = startX + 'px';
+        cartilla.style.top = startY + 'px';
+      }
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+});
   </script>
 </body>
 </html>
