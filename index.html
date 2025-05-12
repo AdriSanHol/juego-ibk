@@ -175,10 +175,27 @@
   }
 
   document.querySelectorAll('.cartilla').forEach(cartilla => {
-    // Posición aleatoria inicial
-    const [randX, randY] = getRandomPosition(850, 1000, 50, 500);
+  const id = cartilla.id;
+
+  if (['I1', 'B1', 'K1'].includes(id)) {
+    // Coloca estas en su posición correcta desde el inicio
+    const [correctX, correctY] = posicionesCorrectas[id];
+    cartilla.style.left = correctX + 'px';
+    cartilla.style.top = correctY + 'px';
+    cartilla.style.pointerEvents = "none";
+    piezasCorrectas.add(id);
+
+    const casillaElement = document.querySelector(`#casilla-${id}`);
+    if (casillaElement) {
+      casillaElement.classList.add('casilla-correcta');
+    }
+
+  } else {
+    // Posición aleatoria en todo el tablero
+    const [randX, randY] = getRandomPosition(50, 1000, 50, 500);
     cartilla.style.left = randX + 'px';
     cartilla.style.top = randY + 'px';
+  }
 
     let offsetX, offsetY, startX, startY;
 
