@@ -64,15 +64,6 @@
       font-weight: bold;
       display: none;
     }
-
-    #zona-cartillas {
-      position: relative;
-      height: 300px;
-      margin-top: 20px;
-      background-color: #e0f2f1;
-      border-radius: 10px;
-      overflow: hidden;
-    }
   </style>
 </head>
 <body>
@@ -87,8 +78,6 @@
         Arrastra las piezas al tablero y colócalas en la casilla correspondiente.
       </p>
     </div>
-
-    <div id="zona-cartillas" style="width: 300px;"></div>
   </div>
 
   <div id="tablero">
@@ -118,6 +107,27 @@
     <div class="casilla" id="K5" style="top: 150px; left: 660px;"></div>
     <div class="casilla" id="K6" style="top: 330px; left: 660px;"></div>
     <div class="casilla" id="K7" style="top: 420px; left: 740px;"></div>
+
+    <!-- Cartillas -->
+    <!-- Las cartillas ahora están directamente en el tablero -->
+    <img src="static/img/I1.png" id="I1" class="cartilla" style="top: 60px; left: 80px;">
+    <img src="static/img/I2.png" id="I2" class="cartilla" style="top: 240px; left: 80px;">
+    <img src="static/img/I3.png" id="I3" class="cartilla" style="top: 420px; left: 80px;">
+    <img src="static/img/B1.png" id="B1" class="cartilla" style="top: 60px; left: 300px;">
+    <img src="static/img/B4.png" id="B4" class="cartilla" style="top: 70px; left: 400px;">
+    <img src="static/img/B7.png" id="B7" class="cartilla" style="top: 155px; left: 430px;">
+    <img src="static/img/B2.png" id="B2" class="cartilla" style="top: 240px; left: 300px;">
+    <img src="static/img/B5.png" id="B5" class="cartilla" style="top: 240px; left: 400px;">
+    <img src="static/img/B8.png" id="B8" class="cartilla" style="top: 325px; left: 430px;">
+    <img src="static/img/B3.png" id="B3" class="cartilla" style="top: 420px; left: 300px;">
+    <img src="static/img/B6.png" id="B6" class="cartilla" style="top: 410px; left: 400px;">
+    <img src="static/img/K1.png" id="K1" class="cartilla" style="top: 60px; left: 580px;">
+    <img src="static/img/K2.png" id="K2" class="cartilla" style="top: 240px; left: 580px;">
+    <img src="static/img/K3.png" id="K3" class="cartilla" style="top: 420px; left: 580px;">
+    <img src="static/img/K4.png" id="K4" class="cartilla" style="top: 60px; left: 740px;">
+    <img src="static/img/K5.png" id="K5" class="cartilla" style="top: 150px; left: 660px;">
+    <img src="static/img/K6.png" id="K6" class="cartilla" style="top: 330px; left: 660px;">
+    <img src="static/img/K7.png" id="K7" class="cartilla" style="top: 420px; left: 740px;">
   </div>
 
   <script>
@@ -131,82 +141,50 @@
 
     const piezas = Object.keys(posicionesCorrectas);
     const piezasCorrectas = new Set();
-    const zonaCartillas = document.getElementById("zona-cartillas");
-
-    piezas.forEach(pieza => {
-      const img = document.createElement("img");
-      img.src = `static/img/${pieza}.png`;
-      img.id = pieza;
-      img.classList.add("cartilla");
-
-      // Posición aleatoria en zona de cartillas
-      img.style.left = Math.floor(Math.random() * 200) + "px";
-      img.style.top = Math.floor(Math.random() * 200) + "px";
-
-      zonaCartillas.appendChild(img);
-    });
 
     document.querySelectorAll('.cartilla').forEach(cartilla => {
-  let offsetX, offsetY, startX, startY;
+      let offsetX, offsetY, startX, startY;
 
-  cartilla.addEventListener('mousedown', e => {
-    startX = cartilla.offsetLeft;
-    startY = cartilla.offsetTop;
-    offsetX = e.clientX - cartilla.offsetLeft;
-    offsetY = e.clientY - cartilla.offsetTop;
+      cartilla.addEventListener('mousedown', e => {
+        startX = cartilla.offsetLeft;
+        startY = cartilla.offsetTop;
+        offsetX = e.clientX - cartilla.offsetLeft;
+        offsetY = e.clientY - cartilla.offsetTop;
 
-    const onMouseMove = e => {
-      cartilla.style.left = (e.clientX - offsetX) + 'px';
-      cartilla.style.top = (e.clientY - offsetY) + 'px';
-    };
+        const onMouseMove = e => {
+          cartilla.style.left = (e.clientX - offsetX) + 'px';
+          cartilla.style.top = (e.clientY - offsetY) + 'px';
+        };
 
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+        const onMouseUp = () => {
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
 
-      // Obtener las coordenadas de la casilla correspondiente
-      const casilla = document.getElementById(cartilla.id);
-      const casillaRect = casilla.getBoundingClientRect();
+          const [correctX, correctY] = posicionesCorrectas[cartilla.id];
+          const dx = Math.abs(cartilla.offsetLeft - correctX);
+          const dy = Math.abs(cartilla.offsetTop - correctY);
 
-      // Obtener las coordenadas de la cartilla
-      const cartillaRect = cartilla.getBoundingClientRect();
+          if (dx < 40 && dy < 40) {
+            cartilla.style.left = correctX + 'px';
+            cartilla.style.top = correctY + 'px';
+            cartilla.style.pointerEvents = "none";
+            piezasCorrectas.add(cartilla.id);
 
-      // Calcular la diferencia de posición
-      const dx = Math.abs(cartillaRect.left - casillaRect.left);
-      const dy = Math.abs(cartillaRect.top - casillaRect.top);
+            if (piezasCorrectas.size === piezas.length) {
+              document.getElementById('mensaje-final').style.display = 'block';
+            }
 
-      // Si la cartilla está cerca de la casilla (puedes ajustar el valor de 20 a tu preferencia)
-      if (dx < 20 && dy < 20) {
-        cartilla.style.left = casillaRect.left - cartillaRect.width + 'px';
-        cartilla.style.top = casillaRect.top - cartillaRect.height + 'px';
-        cartilla.style.pointerEvents = "none";
-        piezasCorrectas.add(cartilla.id);
+            alert("¡Correcto!");
+          } else {
+            cartilla.style.left = startX + 'px';
+            cartilla.style.top = startY + 'px';
+          }
+        };
 
-        if (piezasCorrectas.size === piezas.length) {
-          document.getElementById('mensaje-final').style.display = 'block';
-
-          // Registro en JSON
-          fetch('casillas/registrar_ganador.json', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              ganador: "Jugador",
-              timestamp: new Date().toISOString()
-            })
-          });
-        }
-
-        alert("¡Correcto!");
-      } else {
-        cartilla.style.left = startX + 'px';
-        cartilla.style.top = startY + 'px';
-      }
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  });
-});
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+    });
   </script>
 </body>
 </html>
