@@ -147,58 +147,63 @@
     });
 
     document.querySelectorAll('.cartilla').forEach(cartilla => {
-      let offsetX, offsetY, startX, startY;
+  let offsetX, offsetY, startX, startY;
 
-      cartilla.addEventListener('mousedown', e => {
-        startX = cartilla.offsetLeft;
-        startY = cartilla.offsetTop;
-        offsetX = e.clientX - cartilla.offsetLeft;
-        offsetY = e.clientY - cartilla.offsetTop;
+  cartilla.addEventListener('mousedown', e => {
+    startX = cartilla.offsetLeft;
+    startY = cartilla.offsetTop;
+    offsetX = e.clientX - cartilla.offsetLeft;
+    offsetY = e.clientY - cartilla.offsetTop;
 
-        const onMouseMove = e => {
-          cartilla.style.left = (e.clientX - offsetX) + 'px';
-          cartilla.style.top = (e.clientY - offsetY) + 'px';
-        };
+    const onMouseMove = e => {
+      cartilla.style.left = (e.clientX - offsetX) + 'px';
+      cartilla.style.top = (e.clientY - offsetY) + 'px';
+    };
 
-        const onMouseUp = () => {
-          document.removeEventListener('mousemove', onMouseMove);
-          document.removeEventListener('mouseup', onMouseUp);
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
 
-          const [correctX, correctY] = posicionesCorrectas[cartilla.id];
-          const dx = Math.abs(cartilla.offsetLeft - correctX);
-          const dy = Math.abs(cartilla.offsetTop - correctY);
+      // Asegúrate de calcular la distancia con la posición absoluta en el tablero
+      const tableroRect = document.getElementById("tablero").getBoundingClientRect();
+      const cartillaRect = cartilla.getBoundingClientRect();
 
-          if (dx < 40 && dy < 40) {
-            cartilla.style.left = correctX + 'px';
-            cartilla.style.top = correctY + 'px';
-            cartilla.style.pointerEvents = "none";
-            piezasCorrectas.add(cartilla.id);
+      const dx = Math.abs(cartillaRect.left - tableroRect.left - posicionesCorrectas[cartilla.id][0]);
+      const dy = Math.abs(cartillaRect.top - tableroRect.top - posicionesCorrectas[cartilla.id][1]);
 
-            if (piezasCorrectas.size === piezas.length) {
-              document.getElementById('mensaje-final').style.display = 'block';
+      if (dx < 40 && dy < 40) {
+        cartilla.style.left = posicionesCorrectas[cartilla.id][0] + 'px';
+        cartilla.style.top = posicionesCorrectas[cartilla.id][1] + 'px';
+        cartilla.style.pointerEvents = "none"; // Deshabilita la interacción una vez que esté correcta
+        piezasCorrectas.add(cartilla.id);
 
-              // Registro en JSON
-              fetch('casillas/registrar_ganador.json', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  ganador: "Jugador",
-                  timestamp: new Date().toISOString()
-                })
-              });
-            }
+        if (piezasCorrectas.size === piezas.length) {
+          document.getElementById('mensaje-final').style.display = 'block';
 
-            alert("¡Correcto!");
-          } else {
-            cartilla.style.left = startX + 'px';
-            cartilla.style.top = startY + 'px';
-          }
-        };
+          // Registro en JSON
+          fetch('casillas/registrar_ganador.json', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              ganador: "Jugador",
+              timestamp: new Date().toISOString()
+            })
+          });
+        }
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-      });
-    });
+        alert("¡Correcto!");
+      } else {
+        // Si no está en la posición correcta, vuelve a su posición inicial
+        cartilla.style.left = startX + 'px';
+        cartilla.style.top = startY + 'px';
+      }
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+});
+
   </script>
 </body>
 </html>
