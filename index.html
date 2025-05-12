@@ -34,7 +34,6 @@
       background-color: #ffffff;
       border: 2px solid #ccc;
       border-radius: 10px;
-      z-index: 1; /* Casillas debajo de las cartillas */
     }
 
     .casilla {
@@ -44,7 +43,6 @@
       position: absolute;
       background-color: #e9e9e9;
       border-radius: 10px;
-      z-index: 1; /* Casillas debajo de las cartillas */
     }
 
     .cartilla {
@@ -55,7 +53,6 @@
       border-radius: 10px;
       transition: all 0.2s ease;
       box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-      z-index: 2; /* Cartillas por encima de las casillas */
     }
 
     #mensaje-final {
@@ -98,6 +95,7 @@
     <div id="mensaje-final">¡Ganaste!</div>
 
     <!-- Casillas -->
+    <!-- Letra I -->
     <div class="casilla" id="I1" style="top: 60px; left: 80px;"></div>
     <div class="casilla" id="I2" style="top: 240px; left: 80px;"></div>
     <div class="casilla" id="I3" style="top: 420px; left: 80px;"></div>
@@ -132,4 +130,75 @@
     };
 
     const piezas = Object.keys(posicionesCorrectas);
-    const p
+    const piezasCorrectas = new Set();
+    const zonaCartillas = document.getElementById("zona-cartillas");
+
+    piezas.forEach(pieza => {
+      const img = document.createElement("img");
+      img.src = static/img/${pieza}.png;
+      img.id = pieza;
+      img.classList.add("cartilla");
+
+      // Posición aleatoria en zona de cartillas
+      img.style.left = Math.floor(Math.random() * 200) + "px";
+      img.style.top = Math.floor(Math.random() * 200) + "px";
+
+      zonaCartillas.appendChild(img);
+    });
+
+    document.querySelectorAll('.cartilla').forEach(cartilla => {
+      let offsetX, offsetY, startX, startY;
+
+      cartilla.addEventListener('mousedown', e => {
+        startX = cartilla.offsetLeft;
+        startY = cartilla.offsetTop;
+        offsetX = e.clientX - cartilla.offsetLeft;
+        offsetY = e.clientY - cartilla.offsetTop;
+
+        const onMouseMove = e => {
+          cartilla.style.left = (e.clientX - offsetX) + 'px';
+          cartilla.style.top = (e.clientY - offsetY) + 'px';
+        };
+
+        const onMouseUp = () => {
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+
+          const [correctX, correctY] = posicionesCorrectas[cartilla.id];
+          const dx = Math.abs(cartilla.offsetLeft - correctX);
+          const dy = Math.abs(cartilla.offsetTop - correctY);
+
+          if (dx < 40 && dy < 40) {
+            cartilla.style.left = correctX + 'px';
+            cartilla.style.top = correctY + 'px';
+            cartilla.style.pointerEvents = "none";
+            piezasCorrectas.add(cartilla.id);
+
+            if (piezasCorrectas.size === piezas.length) {
+              document.getElementById('mensaje-final').style.display = 'block';
+
+              // Registro en JSON
+              fetch('casillas/registrar_ganador.json', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  ganador: "Jugador",
+                  timestamp: new Date().toISOString()
+                })
+              });
+            }
+
+            alert("¡Correcto!");
+          } else {
+            cartilla.style.left = startX + 'px';
+            cartilla.style.top = startY + 'px';
+          }
+        };
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+    });
+  </script>
+</body>
+</html>
