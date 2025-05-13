@@ -55,6 +55,36 @@
       margin-bottom: 10px;
     }
 
+    #chispas {
+      position: absolute;
+      top: 40%;
+      left: 30%;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      display: none;
+    }
+
+    .chispa {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #ff0; /* Amarillo para las chispas */
+      border-radius: 50%;
+      animation: chispaAnimacion 1s infinite;
+    }
+
+    @keyframes chispaAnimacion {
+      0% {
+        transform: scale(1) translate(0, 0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0) translate(20px, -20px);
+        opacity: 0;
+      }
+    }
+
     #tablero {
       width: 1500px;
       height: 600px;
@@ -144,6 +174,8 @@
       </p>
     </div>
   </div>
+  <!-- Contenedor para las chispas -->
+  <div id="chispas"></div>
 
   <div id="tablero">
     <div class="mensaje-correcto" id="mensaje-correcto">¡Correcto!</div>
@@ -194,7 +226,7 @@
     <img src="static/img/K6.png" id="K6" class="cartilla">
     <img src="static/img/K7.png" id="K7" class="cartilla">
 
-    <img src="static/img/Insponsor.png" alt="Insponsor" style="position: absolute; bottom: 5px; right: 10px; max-width: 150px;">
+    <img src="static/img/insponsor.png" alt="Insponsor" style="position: absolute; bottom: 5px; right: 10px; max-width: 150px;">
   </div>
 
 <script>
@@ -218,6 +250,37 @@
     setTimeout(() => mensajeCorrecto.style.display = 'none', 1000);
   }
 
+  const sonidoVictoria = new Audio('assets/sounds/ganaste.mp3');  // Ruta al archivo de sonido
+
+  function mostrarMensajeFinal() {
+    const mensajeFinal = document.getElementById('mensaje-final');
+    mensajeFinal.style.display = 'block';
+    mensajeFinal.style.animation = 'fadeIn 1s ease-in-out forwards';  // Agregar animación si es necesario
+
+    // Reproducir el sonido de victoria
+    sonidoVictoria.play();
+
+    // Generar chispas
+    generarChispas();  // Llama a la función de las chispas
+  }
+
+  function generarChispas() {
+    const chispasContainer = document.getElementById('chispas');
+    const cantidadChispas = 30; // Número de chispas a generar
+
+    // Generar chispas aleatorias
+    for (let i = 0; i < cantidadChispas; i++) {
+      const chispa = document.createElement('div');
+      chispa.classList.add('chispa');
+      chispa.style.left = `${Math.random() * 100}%`;  // Posición horizontal aleatoria
+      chispa.style.top = `${Math.random() * 100}%`;   // Posición vertical aleatoria
+      chispasContainer.appendChild(chispa);
+    }
+
+    // Mostrar chispas y ocultarlas después de 2 segundos
+    chispasContainer.style.display = 'block';
+    setTimeout(() => chispasContainer.style.display = 'none', 20000);
+  }
 
   function getRandomPosition(minX, maxX, minY, maxY) {
     return [
@@ -288,7 +351,8 @@
         if (piezasCorrectas.size === piezas.length) {
           const mensajeFinal = document.getElementById('mensaje-final');
           mensajeFinal.style.display = 'block';
-          mensajeFinal.style.animation = 'fadeIn 1s ease-in-out forwards';
+          mensajeFinal.style.animation = 'fadeIn 1s ease-in-out forwards';   
+          mostrarMensajeFinal(); // Muestra el mensaje, sonido y chispas
         }
         } else {
           cartilla.style.left = startX + 'px';
