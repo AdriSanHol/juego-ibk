@@ -41,7 +41,7 @@
 
     #instrucciones {
       width: 250px;
-      margin-right: 10px;
+      margin-right: 20px;
     }
 
     .titulo {
@@ -88,13 +88,13 @@
     }
 
     #tablero {
-      width: 120%;
+      width: 1500px;
       height: 600px;
       position: relative;
       background-color: #ffffff;
       border: 2px solid #ccc;
       border-radius: 10px;
-      margin-left: -30px;
+      margin-left: -80px;
       overflow: visible;
     }
 
@@ -166,7 +166,7 @@
 <body>
   <div>
     <div id="instrucciones">
-      <img src="static/img/logo.png" alt="Logo" style="max-width: 200px; display: block; margin: 10px 0 30px 0px;">
+      <img src="static/img/logo.png" alt="Logo" style="max-width: 150px; display: block; margin: 10px 0 30px 0px;">
       <h2 class="titulo">Instrucciones</h2>
       <p class="descripcion">
         Une cada <span style="color: #105e10;">valor</span> con su
@@ -191,20 +191,20 @@
     <div class="casilla" id="casilla-I3" style="top: 390px; left: 30px;"></div>
 
     <!-- B -->
-    <div class="casilla" id="casilla-B1" style="top: 30px; left: 190px;"></div>
-    <div class="casilla" id="casilla-B4" style="top: -10px; left: 330px;"></div>
-    <div class="casilla" id="casilla-B7" style="top: 70px; left: 460px;"></div>
-    <div class="casilla" id="casilla-B2" style="top: 210px; left: 190px;"></div>
-    <div class="casilla" id="casilla-B5" style="top: 185px; left: 330px;"></div>
-    <div class="casilla" id="casilla-B8" style="top: 295px; left: 460px;"></div>
-    <div class="casilla" id="casilla-B3" style="top: 390px; left: 190px;"></div>
-    <div class="casilla" id="casilla-B6" style="top: 410px; left: 330px;"></div>
+    <div class="casilla" id="casilla-B1" style="top: 30px; left: 180px;"></div>
+    <div class="casilla" id="casilla-B4" style="top: -10px; left: 320px;"></div>
+    <div class="casilla" id="casilla-B7" style="top: 70px; left: 450px;"></div>
+    <div class="casilla" id="casilla-B2" style="top: 210px; left: 180px;"></div>
+    <div class="casilla" id="casilla-B5" style="top: 185px; left: 320px;"></div>
+    <div class="casilla" id="casilla-B8" style="top: 295px; left: 450px;"></div>
+    <div class="casilla" id="casilla-B3" style="top: 390px; left: 180px;"></div>
+    <div class="casilla" id="casilla-B6" style="top: 410px; left: 320px;"></div>
 
     <!-- K -->
     <div class="casilla" id="casilla-K1" style="top: 30px; left: 580px;"></div>
     <div class="casilla" id="casilla-K2" style="top: 210px; left: 580px;"></div>
     <div class="casilla" id="casilla-K3" style="top: 390px; left: 580px;"></div>
-    <div class="casilla" id="casilla-K4" style="top: 5px; left: 830px;"></div>
+    <div class="casilla" id="casilla-K4" style="top: 10px; left: 830px;"></div>
     <div class="casilla" id="casilla-K5" style="top: 120px; left: 720px;"></div>
     <div class="casilla" id="casilla-K6" style="top: 240px; left: 790px;"></div>
     <div class="casilla" id="casilla-K7" style="top: 360px; left: 900px;"></div>
@@ -235,9 +235,9 @@
 <script>
   const posicionesCorrectas = {
     I1: [30, 30], I2: [30, 210], I3: [30, 390],
-    B1: [190, 30], B4: [330, -10], B7: [460, 70], B2: [190, 210],
-    B5: [330, 185], B8: [460, 295], B3: [190, 390], B6: [330, 410],
-    K1: [580, 30], K2: [580, 210], K3: [580, 390], K4: [830, 5],
+    B1: [180, 30], B4: [320, -10], B7: [450, 70], B2: [180, 210],
+    B5: [320, 185], B8: [450, 295], B3: [180, 390], B6: [320, 410],
+    K1: [580, 30], K2: [580, 210], K3: [580, 390], K4: [830, 10],
     K5: [720, 120], K6: [790, 240], K7: [900, 360]
   };
 
@@ -321,7 +321,7 @@
 
   } else {
     // Posición aleatoria en todo el tablero
-    const [randX, randY] = getRandomPosition(-220, -100, window.innerHeight - 250, window.innerHeight - 180);
+    const [randX, randY] = getRandomPosition(-220, -100, window.innerHeight - 200, window.innerHeight - 180);
     cartilla.style.left = randX + 'px';
     cartilla.style.top = randY + 'px';
   }
