@@ -9,7 +9,7 @@
       font-family: 'Poppins', sans-serif;
       background-color: #f5f5f5;
       margin: 0;
-      padding: 20px;
+      padding: 10px 8px 10px 20px;
       display: flex;
     }
     
@@ -92,12 +92,12 @@
 
     #tablero {
       width: 1500px;
-      height: 600px;
+      height: 550px;
       position: relative;
       background-color: #ffffff;
       border: 2px solid #ccc;
       border-radius: 10px;
-      margin-left: -90px;
+      margin-left: -85px;
       overflow: visible;
     }
 
@@ -179,7 +179,7 @@
 <body>
   <div>
     <div id="instrucciones">
-      <img src="static/img/logo.png" alt="Logo" style="max-width: 180px; display: block; margin: 10px 0 25px -10px;">
+      <img src="static/img/logo.png" alt="Logo" style="max-width: 180px; display: block; margin: 10px 25px 35px -10px;">
       <h2 class="titulo">Instrucciones</h2>
       <p class="descripcion">
         Une cada <strong><span style="color: #105e10;">valor</span></strong> con su
@@ -217,10 +217,10 @@
     <div class="casilla" id="casilla-K1" style="top: 30px; left: 580px;"></div>
     <div class="casilla" id="casilla-K2" style="top: 210px; left: 580px;"></div>
     <div class="casilla" id="casilla-K3" style="top: 390px; left: 580px;"></div>
-    <div class="casilla" id="casilla-K4" style="top: 10px; left: 830px;"></div>
-    <div class="casilla" id="casilla-K5" style="top: 120px; left: 720px;"></div>
-    <div class="casilla" id="casilla-K6" style="top: 240px; left: 790px;"></div>
-    <div class="casilla" id="casilla-K7" style="top: 360px; left: 900px;"></div>
+    <div class="casilla" id="casilla-K4" style="top: 13px; left: 830px;"></div>
+    <div class="casilla" id="casilla-K5" style="top: 123px; left: 720px;"></div>
+    <div class="casilla" id="casilla-K6" style="top: 243px; left: 790px;"></div>
+    <div class="casilla" id="casilla-K7" style="top: 363px; left: 900px;"></div>
 
     <!-- Cartillas -->
     <img src="static/img/I1.png" id="I1" class="cartilla">
@@ -242,7 +242,7 @@
     <img src="static/img/K6.png" id="K6" class="cartilla">
     <img src="static/img/K7.png" id="K7" class="cartilla">
 
-    <img src="static/img/Insponsor.png" alt="Insponsor" style="position: absolute; bottom: 33px; right: 10px; max-width: 150px;">
+    <img src="static/img/Insponsor.png" alt="Insponsor" style="position: absolute; bottom: 290px; right: 10px; max-width: 150px;">
   </div>
 
 <script>
@@ -251,7 +251,7 @@
     B1: [180, 30], B4: [320, -10], B7: [450, 70], B2: [180, 210],
     B5: [320, 185], B8: [450, 295], B3: [180, 390], B6: [320, 410],
     K1: [580, 30], K2: [580, 210], K3: [580, 390], K4: [830, 10],
-    K5: [720, 120], K6: [790, 240], K7: [900, 360]
+    K5: [720, 123], K6: [790, 243], K7: [900, 363]
   };
 
   const tablero = document.getElementById('tablero');
@@ -340,7 +340,7 @@
 
   } else {
     // Posición aleatoria en todo el tablero
-    const [randX, randY] = getRandomPosition(-210, -90, window.innerHeight - 200, window.innerHeight - 180);
+    const [randX, randY] = getRandomPosition(-190, -80, window.innerHeight - 220, window.innerHeight - 180);
     cartilla.style.left = randX + 'px';
     cartilla.style.top = randY + 'px';
   }
