@@ -41,7 +41,7 @@
 
     #instrucciones {
       width: 250px;
-      margin-right: 30px;
+      margin-right: 10px;
     }
 
     .titulo {
@@ -53,6 +53,8 @@
     .descripcion {
       color: #1d1069;
       margin-bottom: 10px;
+      width: 200px;
+      margin-right: 10px;
     }
 
     #chispas {
@@ -86,13 +88,14 @@
     }
 
     #tablero {
-      width: 1500px;
+      width: 120%;
       height: 600px;
       position: relative;
       background-color: #ffffff;
       border: 2px solid #ccc;
       border-radius: 10px;
       margin-left: -30px;
+      overflow: visible;
     }
 
     .casilla {
@@ -203,8 +206,8 @@
     <div class="casilla" id="casilla-K3" style="top: 390px; left: 580px;"></div>
     <div class="casilla" id="casilla-K4" style="top: 5px; left: 830px;"></div>
     <div class="casilla" id="casilla-K5" style="top: 120px; left: 720px;"></div>
-    <div class="casilla" id="casilla-K6" style="top: 300px; left: 660px;"></div>
-    <div class="casilla" id="casilla-K7" style="top: 390px; left: 740px;"></div>
+    <div class="casilla" id="casilla-K6" style="top: 240px; left: 790px;"></div>
+    <div class="casilla" id="casilla-K7" style="top: 360px; left: 900px;"></div>
 
     <!-- Cartillas -->
     <img src="static/img/I1.png" id="I1" class="cartilla">
@@ -226,7 +229,7 @@
     <img src="static/img/K6.png" id="K6" class="cartilla">
     <img src="static/img/K7.png" id="K7" class="cartilla">
 
-    <img src="static/img/insponsor.png" alt="Insponsor" style="position: absolute; bottom: 5px; right: 10px; max-width: 150px;">
+    <img src="static/img/Insponsor.png" alt="Insponsor" style="position: absolute; bottom: 5px; right: 10px; max-width: 150px;">
   </div>
 
 <script>
@@ -235,8 +238,19 @@
     B1: [190, 30], B4: [330, -10], B7: [460, 70], B2: [190, 210],
     B5: [330, 185], B8: [460, 295], B3: [190, 390], B6: [330, 410],
     K1: [580, 30], K2: [580, 210], K3: [580, 390], K4: [830, 5],
-    K5: [720, 120], K6: [660, 300], K7: [740, 390]
+    K5: [720, 120], K6: [790, 240], K7: [900, 360]
   };
+
+  const tablero = document.getElementById('tablero');
+  const cartillas = Array.from(document.querySelectorAll('.cartilla'));
+
+  // Mezclar aleatoriamente
+  cartillas.sort(() => Math.random() - 0.5);
+
+  // Reinsertar en el DOM en orden aleatorio
+  cartillas.forEach(cartilla => {
+    tablero.appendChild(cartilla);
+  });
 
   const piezasCorrectas = new Set();
   const piezas = Object.keys(posicionesCorrectas);
@@ -307,7 +321,7 @@
 
   } else {
     // Posición aleatoria en todo el tablero
-    const [randX, randY] = getRandomPosition(-280, -80, window.innerHeight - 250, window.innerHeight - 180);
+    const [randX, randY] = getRandomPosition(-220, -100, window.innerHeight - 250, window.innerHeight - 180);
     cartilla.style.left = randX + 'px';
     cartilla.style.top = randY + 'px';
   }
