@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
   <meta charset="UTF-8" />
   <title>Juego Dominó - IBK</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Poppins', sans-serif;
       background-color: #f5f5f5;
       margin: 0;
       padding: 20px;
@@ -42,12 +43,13 @@
     #instrucciones {
       width: 250px;
       margin-right: 20px;
+      font-size: 14px;
     }
 
     .titulo {
       color: #1a9f3d;
       font-weight: bold;
-      font-size: 24px;
+      font-size: 18px;
     }
 
     .descripcion {
@@ -55,6 +57,7 @@
       margin-bottom: 10px;
       width: 200px;
       margin-right: 10px;
+      font-size: 12px;
     }
 
     #chispas {
@@ -109,8 +112,18 @@
     }
 
     .casilla-correcta {
-      border: 3px solid #00e676 !important;
-      box-shadow: 0 0 10px #00e676;
+      border: 3px solid #00ff00 !important; /* Verde más brillante */
+      box-shadow: 0 0 10px 3px #00ff00; /* Más intensidad y expansión */
+    }
+
+    .casilla-correcta-I {
+      border: 3px solid #ffff00 !important; /* Amarillo más fuerte */
+      box-shadow: 0 0 10px 3px #ffff00;
+    }
+
+    .casilla-correcta-K {
+      border: 3px solid #ff00ff !important; /* Fucsia intenso */
+      box-shadow: 0 0 10px 3px #ff00ff;
     }
 
     .mensaje-correcto {
@@ -141,7 +154,7 @@
       top: 40%;
       left: 30%;
       font-size: 100px;
-      color: rgb(186, 33, 104);
+      color: rgb(7, 5, 126);
       font-weight: bold;
       display: none;
       z-index: 999;
@@ -166,12 +179,12 @@
 <body>
   <div>
     <div id="instrucciones">
-      <img src="static/img/logo.png" alt="Logo" style="max-width: 150px; display: block; margin: 10px 0 30px 0px;">
+      <img src="static/img/logo.png" alt="Logo" style="max-width: 180px; display: block; margin: 10px 0 25px -10px;">
       <h2 class="titulo">Instrucciones</h2>
       <p class="descripcion">
-        Une cada <span style="color: #105e10;">valor</span> con su
-        <span style="color: #36e433;">comportamiento</span> correcto.
-      </p>
+        Une cada <strong><span style="color: #105e10;">valor</span></strong> con su
+        <strong><span style="color: #36e433;">comportamiento</span></strong> correcto.
+      </p>      
       <p class="descripcion">
         Arrastra las piezas al tablero y colócalas en la casilla correspondiente.
       </p>
@@ -229,7 +242,7 @@
     <img src="static/img/K6.png" id="K6" class="cartilla">
     <img src="static/img/K7.png" id="K7" class="cartilla">
 
-    <img src="static/img/Insponsor.png" alt="Insponsor" style="position: absolute; bottom: 5px; right: 10px; max-width: 150px;">
+    <img src="static/img/Insponsor.png" alt="Insponsor" style="position: absolute; bottom: 33px; right: 10px; max-width: 150px;">
   </div>
 
 <script>
@@ -315,13 +328,19 @@
     piezasCorrectas.add(id);
 
     const casillaElement = document.querySelector(`#casilla-${id}`);
-    if (casillaElement) {
-      casillaElement.classList.add('casilla-correcta');
-    }
+      if (casillaElement) {
+        if (id.startsWith('I')) {
+          casillaElement.classList.add('casilla-correcta-I');
+        } else if (id.startsWith('K')) {
+          casillaElement.classList.add('casilla-correcta-K');
+        } else {
+          casillaElement.classList.add('casilla-correcta'); // B mantiene el verde fosforescente
+        }
+      }
 
   } else {
     // Posición aleatoria en todo el tablero
-    const [randX, randY] = getRandomPosition(-220, -100, window.innerHeight - 200, window.innerHeight - 180);
+    const [randX, randY] = getRandomPosition(-210, -90, window.innerHeight - 200, window.innerHeight - 180);
     cartilla.style.left = randX + 'px';
     cartilla.style.top = randY + 'px';
   }
@@ -356,7 +375,13 @@
           piezasCorrectas.add(cartilla.id);
 
           if (casillaElement) {
-            casillaElement.classList.add('casilla-correcta');
+            if (id.startsWith("I")) {
+              casillaElement.classList.add('casilla-correcta-I');
+            } else if (id.startsWith("K")) {
+              casillaElement.classList.add('casilla-correcta-K');
+            } else {
+              casillaElement.classList.add('casilla-correcta');
+            }
           }
 
           mostrarMensajeCorrecto();
