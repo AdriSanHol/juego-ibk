@@ -53,6 +53,21 @@ body {
       font-size: 12px;
     }
 
+    .mensaje-error {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #ffd5d5;
+      color: #b30000;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      z-index: 9999;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+     }
+
     #chispas {
       position: absolute;
       top: 40%;
