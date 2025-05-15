@@ -55,12 +55,10 @@ body {
 
     .numero-casilla {
       position: absolute;
-      top: 50%;
-      left: 50%;
       transform: translate(-50%, -50%); /* Centra vertical y horizontalmente */
-      font-size: 14px;
-      font-family: 'Poppins', sans-serif; /* Fuente moderna y legible */
-      color: #4A4A4A; /* Gris oscuro agradable */
+      font-size: 15px;
+      font-family: 'Poppins', sans-serif;
+      color: #1B4332; 
       font-weight: 500;
       pointer-events: none;
       opacity: 0.8; 
