@@ -155,6 +155,7 @@
         } else {
           cartilla.style.left = startX + 'px';
           cartilla.style.top = startY + 'px';
+          mostrarMensajeInCorrecto();
         }
         };
 
