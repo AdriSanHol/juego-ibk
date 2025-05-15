@@ -53,6 +53,16 @@ body {
       font-size: 12px;
     }
 
+    .numero-casilla {
+      position: absolute;
+      top: 2px;
+      left: 4px;
+      font-size: 14px;
+      color: #333;
+      font-weight: bold;
+      pointer-events: none; /* para que no interfiera con el drag and drop */
+     }
+
     .mensaje-error {
       position: absolute;
       top: 30px;
