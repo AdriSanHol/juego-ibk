@@ -63,6 +63,17 @@ body {
         pointer-events: none;
       }
 
+      .numero-casilla-invertida {
+        position: absolute;
+        top: 2px;
+        right: 4px;
+        font-size: 13px;
+        color: #333;
+        font-weight: bold;
+        pointer-events: none;
+        transform: rotate(180deg); /* Gira el texto */
+      }
+
     .mensaje-error {
       position: absolute;
       top: 30px;
