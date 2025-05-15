@@ -23,11 +23,16 @@
   const mensajeCorrecto = document.getElementById('mensaje-correcto');
 
   const sonidoCorrecto = new Audio('assets/sounds/correcto.mp3'); // Ruta al archivo de sonido
+  const sonidoInCorrecto = new Audio('assets/sounds/error.mp3'); // Ruta al archivo de alerta
 
   function mostrarMensajeCorrecto() {
     sonidoCorrecto.play();  // Reproduce el sonido
     mensajeCorrecto.style.display = 'block';
     setTimeout(() => mensajeCorrecto.style.display = 'none', 1000);
+  }
+
+  function mostrarMensajeInCorrecto() {
+    sonidoInCorrecto.play();
   }
 
   const sonidoVictoria = new Audio('assets/sounds/ganaste.mp3');  // Ruta al archivo de sonido
@@ -135,6 +140,7 @@
             } else {
               casillaElement.classList.add('casilla-correcta');
             }
+            mostrarMensajeCorrecto();
           }
 
           mostrarMensajeCorrecto();
