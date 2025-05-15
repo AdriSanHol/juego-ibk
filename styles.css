@@ -55,7 +55,7 @@ body {
 
     .mensaje-error {
       position: absolute;
-      top: 10px;
+      top: 30px;
       left: 90%;
       transform: translateX(-50%);
       background-color: #ffd5d5;
@@ -143,7 +143,7 @@ body {
       font-weight: bold;
       display: none;
       z-index: 10;
-      top: 50px;
+      top: 30px;
       right: 10px;
     }
 
