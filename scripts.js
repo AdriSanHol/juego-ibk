@@ -21,6 +21,7 @@
   const piezasCorrectas = new Set();
   const piezas = Object.keys(posicionesCorrectas);
   const mensajeCorrecto = document.getElementById('mensaje-correcto');
+  const mensajeError = document.getElementById('mensaje-error');
 
   const sonidoCorrecto = new Audio('assets/sounds/correcto.mp3'); // Ruta al archivo de sonido
   const sonidoInCorrecto = new Audio('assets/sounds/error.mp3'); // Ruta al archivo de alerta
@@ -33,6 +34,8 @@
 
   function mostrarMensajeInCorrecto() {
     sonidoInCorrecto.play();
+    mensajeError.style.display = 'block';
+    setTimeout(() => mensajeError.style.display = 'none', 1500);
   }
 
   const sonidoVictoria = new Audio('assets/sounds/ganaste.mp3');  // Ruta al archivo de sonido
