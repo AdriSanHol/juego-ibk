@@ -53,15 +53,14 @@ body {
       font-size: 12px;
     }
 
-    .numero-casilla {
-      position: absolute;
-      transform: translate(-50%, -50%); /* Centra vertical y horizontalmente */
-      font-size: 15px;
-      font-family: 'Poppins', sans-serif;
-      color: #1B4332; 
-      font-weight: 500;
-      pointer-events: none;
-      opacity: 0.8; 
+      .numero-casilla {
+        position: absolute;
+        top: 2px;
+        left: 4px;
+        font-size: 14px;
+        color: #333;
+        font-weight: bold;
+        pointer-events: none; 
       }
 
     .mensaje-error {
