@@ -57,10 +57,10 @@ body {
         position: absolute;
         top: 2px;
         left: 4px;
-        font-size: 14px;
+        font-size: 13px;
         color: #333;
         font-weight: bold;
-        pointer-events: none; 
+        pointer-events: none;
       }
 
     .mensaje-error {
