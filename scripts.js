@@ -1,3 +1,51 @@
+const welcomeCard   = document.getElementById('welcome-card');
+const startButton   = document.getElementById('start-button');
+const usernameInput = document.getElementById('username-input');
+
+startButton.addEventListener('click', () => {
+  const name = usernameInput.value.trim();
+  
+  const words = name.split(' ').filter(w => w.length > 0);
+  if (words.length < 2) {
+    alert('Por favor, ingresa nombre y apellido completos');
+    usernameInput.focus();
+    return;
+  }
+
+  // Validar que solo tenga letras y espacios (sin números ni emojis)
+  // Regex: solo letras (mayúsculas o minúsculas) y espacios
+  const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
+  if (!regex.test(name)) {
+    alert('El nombre y apellido solo deben contener letras y espacios');
+    usernameInput.focus();
+    return;
+  }
+
+  // Fecha y hora SOLO cuando se hace click
+  const now  = new Date();
+  const date = now.toISOString().split('T')[0];
+  const time = now.toTimeString().split(' ')[0];
+
+  // POST al backend
+  fetch('https://json-server-domino-ibk.onrender.com/ingresos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, date, time })
+  })
+  .then(res => {
+    if (!res.ok) throw new Error('Error al guardar ingreso');
+    return res.json();
+  })
+  .then(entry => {
+    console.log('Ingreso guardado:', entry);
+    // Ocultar la card solo si guardó OK
+    welcomeCard.style.display = 'none';
+  })
+  .catch(err => {
+    console.error(err);
+    alert('No se pudo registrar tu nombre. Intenta de nuevo.');
+  });
+});
 
   const posicionesCorrectas = {
     I1: [30, 30], I2: [30, 210], I3: [30, 390],
@@ -33,10 +81,12 @@
   }
 
   function mostrarMensajeInCorrecto() {
-    sonidoInCorrecto.play();
-    mensajeError.style.display = 'block';
-    setTimeout(() => mensajeError.style.display = 'none', 1500);
-  }
+  if (mensajeError.style.display === 'block') return; // ya está visible, no hacer nada
+  sonidoInCorrecto.play();
+  mensajeError.style.display = 'block';
+  setTimeout(() => mensajeError.style.display = 'none', 1500);
+}
+
 
   const sonidoVictoria = new Audio('assets/sounds/ganaste.mp3');  // Ruta al archivo de sonido
 
@@ -77,7 +127,7 @@
     ];
   }
 
-  document.querySelectorAll('.cartilla').forEach(cartilla => {
+document.querySelectorAll('.cartilla').forEach(cartilla => {
   const id = cartilla.id;
 
   if (['I1', 'B1', 'K1'].includes(id)) {
@@ -89,15 +139,15 @@
     piezasCorrectas.add(id);
 
     const casillaElement = document.querySelector(`#casilla-${id}`);
-      if (casillaElement) {
-        if (id.startsWith('I')) {
-          casillaElement.classList.add('casilla-correcta-I');
-        } else if (id.startsWith('K')) {
-          casillaElement.classList.add('casilla-correcta-K');
-        } else {
-          casillaElement.classList.add('casilla-correcta'); // B mantiene el verde fosforescente
-        }
+    if (casillaElement) {
+      if (id.startsWith('I')) {
+        casillaElement.classList.add('casilla-correcta-I');
+      } else if (id.startsWith('K')) {
+        casillaElement.classList.add('casilla-correcta-K');
+      } else {
+        casillaElement.classList.add('casilla-correcta'); // B mantiene el verde fosforescente
       }
+    }
 
   } else {
     // Posición aleatoria en todo el tablero
@@ -106,63 +156,66 @@
     cartilla.style.top = randY + 'px';
   }
 
-    let offsetX, offsetY, startX, startY;
+  let offsetX, offsetY, startX, startY;
 
-    cartilla.addEventListener('mousedown', e => {
-      startX = cartilla.offsetLeft;
-      startY = cartilla.offsetTop;
-      offsetX = e.clientX - startX;
-      offsetY = e.clientY - startY;
+  cartilla.addEventListener('mousedown', e => {
+    startX = cartilla.offsetLeft;
+    startY = cartilla.offsetTop;
+    offsetX = e.clientX - startX;
+    offsetY = e.clientY - startY;
 
-      const onMouseMove = e => {
-        cartilla.style.left = (e.clientX - offsetX) + 'px';
-        cartilla.style.top = (e.clientY - offsetY) + 'px';
-      };
+    const onMouseMove = e => {
+      cartilla.style.left = (e.clientX - offsetX) + 'px';
+      cartilla.style.top = (e.clientY - offsetY) + 'px';
+    };
 
-      const onMouseUp = () => {
-        document.removeEventListener('mousemove', onMouseMove);
-        document.removeEventListener('mouseup', onMouseUp);
+    const onMouseUp = () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
 
-        const [correctX, correctY] = posicionesCorrectas[cartilla.id];
-        const dx = Math.abs(cartilla.offsetLeft - correctX);
-        const dy = Math.abs(cartilla.offsetTop - correctY);
+      const [correctX, correctY] = posicionesCorrectas[cartilla.id];
+      const dx = Math.abs(cartilla.offsetLeft - correctX);
+      const dy = Math.abs(cartilla.offsetTop - correctY);
 
-        const casillaElement = document.querySelector(`#casilla-${cartilla.id}`);
+      const casillaElement = document.querySelector(`#casilla-${cartilla.id}`);
 
-        if (dx < 40 && dy < 40) {
-          cartilla.style.left = correctX + 'px';
-          cartilla.style.top = correctY + 'px';
-          cartilla.style.pointerEvents = "none";
-          piezasCorrectas.add(cartilla.id);
+      if (dx < 40 && dy < 40) {
+        cartilla.style.left = correctX + 'px';
+        cartilla.style.top = correctY + 'px';
+        cartilla.style.pointerEvents = "none";
+        piezasCorrectas.add(cartilla.id);
 
-          if (casillaElement) {
-            if (id.startsWith("I")) {
-              casillaElement.classList.add('casilla-correcta-I');
-            } else if (id.startsWith("K")) {
-              casillaElement.classList.add('casilla-correcta-K');
-            } else {
-              casillaElement.classList.add('casilla-correcta');
-            }
-            mostrarMensajeCorrecto();
+        if (casillaElement) {
+          if (id.startsWith("I")) {
+            casillaElement.classList.add('casilla-correcta-I');
+          } else if (id.startsWith("K")) {
+            casillaElement.classList.add('casilla-correcta-K');
+          } else {
+            casillaElement.classList.add('casilla-correcta');
           }
-
           mostrarMensajeCorrecto();
+        }
 
-         // Verificamos si todas las piezas están correctas
+        mostrarMensajeCorrecto();
+
+        // Verificamos si todas las piezas están correctas
         if (piezasCorrectas.size === piezas.length) {
           const mensajeFinal = document.getElementById('mensaje-final');
           mensajeFinal.style.display = 'block';
-          mensajeFinal.style.animation = 'fadeIn 1s ease-in-out forwards';   
+          mensajeFinal.style.animation = 'fadeIn 1s ease-in-out forwards';
           mostrarMensajeFinal(); // Muestra el mensaje, sonido y chispas
         }
-        } else {
-          cartilla.style.left = startX + 'px';
-          cartilla.style.top = startY + 'px';
+      } else {
+        // Evita mostrar mensaje repetido si ya está visible
+        if (mensajeError.style.display !== 'block') {
           mostrarMensajeInCorrecto();
         }
-        };
+        cartilla.style.left = startX + 'px';
+        cartilla.style.top = startY + 'px';
+      }
+    };
 
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-    });
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
   });
+});
