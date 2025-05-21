@@ -1,6 +1,7 @@
 const welcomeCard   = document.getElementById('welcome-card');
 const startButton   = document.getElementById('start-button');
 const usernameInput = document.getElementById('username-input');
+const vpSelect = document.getElementById('vp-select');
 
 startButton.addEventListener('click', () => {
   const name = usernameInput.value.trim();
@@ -12,6 +13,13 @@ startButton.addEventListener('click', () => {
     return;
   }
 
+  const vp = vpSelect.value;
+  if (!vp) {
+  alert('Por favor, selecciona una VP');
+  vpSelect.focus();
+  return;
+  }
+  
   // Validar que solo tenga letras y espacios (sin números ni emojis)
   // Regex: solo letras (mayúsculas o minúsculas) y espacios
   const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/;
@@ -30,7 +38,7 @@ startButton.addEventListener('click', () => {
   fetch('https://json-server-domino-ibk.onrender.com/ingresos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, date, time })
+    body: JSON.stringify({ name, vp, date, time })
   })
   .then(res => {
     if (!res.ok) throw new Error('Error al guardar ingreso');
