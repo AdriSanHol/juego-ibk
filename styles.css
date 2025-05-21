@@ -45,6 +45,11 @@ body {
       font-size: 18px;
     }
 
+    .placeholder-option {
+      color: #aaa; /* plomo claro */
+      font-size: 14px;
+     }
+
     .descripcion {
       color: #1d1069;
       margin-bottom: 10px;
